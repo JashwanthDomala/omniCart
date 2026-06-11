@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken") 
-const {jwt_secret} = require("../config/env")
+const {jwt__access_secret , jwt_refresh_secret} = require("../config/env")
 const userModel = require("../models/users.model")
 
 async function authenticate(req,res,next){
@@ -9,7 +9,7 @@ async function authenticate(req,res,next){
         if(!accessToken){
            return await assignAccessToken(req,res,next)
         }else{
-            const {user_id} = jwt.verify(accessToken,jwt_secret)
+            const {user_id} = jwt.verify(accessToken,jwt_access_secret)
             const user = await userModel.findOne({
                 _id : user_id
             },{role : 1 , _id : 0})
@@ -36,7 +36,7 @@ async function assignAccessToken(req,res,next){
             req.isAuth = false
             return next()
         }
-        const {user_id} = jwt.verify(refreshToken,jwt_secret);
+        const {user_id} = jwt.verify(refreshToken,jwt_refresh_secret);
 
         const user = await userModel.findOne({
             _id : user_id
@@ -50,7 +50,7 @@ async function assignAccessToken(req,res,next){
 
         const accessToken = jwt.sign({
             user_id
-        },jwt_secret,{
+        },jwt_access_secret,{
             expiresIn : "15m"
         })
 

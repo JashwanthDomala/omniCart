@@ -15,7 +15,8 @@ try{
 
 // jwt
 try{
-    exports.jwt_secret = process.env.JWT_SECRET
+    exports.jwt_access_secret = process.env.JWT_ACCESS_SECRET
+    exports.jwt_refresh_secret = process.env.JWT_REFRESH_SECRET
 }catch{
     console.log("jwt secret not found in env")
 }
